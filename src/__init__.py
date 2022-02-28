@@ -1,1 +1,1 @@
-from .data import read_corpus
+from .model import CBOWModel, SkipGramModel

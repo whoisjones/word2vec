@@ -1,0 +1,11 @@
+model_name: cbow
+model_dir: weights/cbow_WikiText2
+
+dataset: WikiText2
+data_dir: data/
+train_batch_size: 96
+val_batch_size: 96
+shuffle: True
+
+learning_rate: 0.025
+epochs: 5
