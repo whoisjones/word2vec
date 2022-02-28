@@ -1,10 +1,9 @@
-model_name: cbow
-model_dir: weights/cbow_WikiText2
+model_name: skipgram
+model_dir: resources/skipgram
+window_size: 4
 
 dataset: WikiText2
-data_dir: data/
-train_batch_size: 96
-val_batch_size: 96
+batch_size: 32
 shuffle: True
 
 learning_rate: 0.025
