@@ -71,7 +71,7 @@ class Trainer:
             running_loss.append(loss.item())
 
             if i in log_checkpoints:
-                print()
+                print(f"Epoch {i}/{len(self.train_dataloader)} done: {running_loss[-1]}")
 
         epoch_loss = np.mean(running_loss)
         self.loss["train"].append(epoch_loss)

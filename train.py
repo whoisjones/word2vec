@@ -22,7 +22,6 @@ def train(config):
         split="train",
         batch_size=config["batch_size"],
         window_size=config["window_size"],
-        return_vocab=True,
     )
     val_dataloader, _ = get_dataloader(
         model_name=config["model_name"],
@@ -30,7 +29,7 @@ def train(config):
         split="valid",
         batch_size=config["batch_size"],
         window_size=config["window_size"],
-        return_vocab=False,
+        vocab=vocab
     )
 
     vocab_size = len(vocab.get_stoi())

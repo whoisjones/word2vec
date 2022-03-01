@@ -103,18 +103,16 @@ def get_dataloader(
     split: str,
     batch_size: int,
     window_size: int,
-    return_vocab: bool,
+    vocab=None,
 ):
     dataset = get_data_iterator(dataset_name=dataset_name, split=split)
     tokenizer = get_tokenizer("basic_english", language="en")
 
-    if return_vocab:
+    if not vocab:
         vocab = build_vocab_from_iterator(
             map(tokenizer, dataset), specials=["<unk>"], min_freq=5
         )
         vocab.set_default_index(vocab["<unk>"])
-    else:
-        vocab = None
 
     text_pipeline = lambda x: vocab(tokenizer(x))
 
