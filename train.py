@@ -8,6 +8,7 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 
 from src.data import get_dataloader
+from src.analogy import evaluate
 from src.model import SkipGramModel
 from src.trainer import Trainer
 
@@ -65,7 +66,8 @@ def train(config):
     vocab_path = os.path.join(config["model_dir"], "vocab.pt")
     torch.save(vocab, vocab_path)
 
-    # TODO implement analogy task
+    vecs = model.expand.weight.cpu().detach().numpy()
+    evaluate(vocab, vecs, ['king', 'father', 'school', 'news'])
 
 
 if __name__ == "__main__":
