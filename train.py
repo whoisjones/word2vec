@@ -66,7 +66,7 @@ def train(config):
     vocab_path = os.path.join(config["model_dir"], "vocab.pt")
     torch.save(vocab, vocab_path)
 
-    vecs = model.expand.weight.cpu().detach().numpy()
+    vecs = model.linear.weight.cpu().detach().numpy()
     evaluate(vocab, vecs, ['king', 'father', 'school', 'news'])
 
 
