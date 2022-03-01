@@ -2,18 +2,20 @@ import argparse
 import yaml
 import os
 
+import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 
 from src.data import get_dataloader
+from src.model import SkipGramModel
+from src.trainer import Trainer
 
 
 def train(config):
-    os.makedirs(config["model_dir"])
+    if not os.path.isdir(config["model_dir"]):
+        os.makedirs(config["model_dir"])
 
-    # TODO create dataloader function
-    # TODO where to place vocab
     train_dataloader, vocab = get_dataloader(
         model_name=config["model_name"],
         dataset_name=config["dataset"],
@@ -31,34 +33,43 @@ def train(config):
         return_vocab=False,
     )
 
-    # TODO model
-    model = model(vocab)
+    vocab_size = len(vocab.get_stoi())
+    model = SkipGramModel(vocab_size=vocab_size, embedding_dim=100)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=1)
+    optimizer = optim.Adam(model.parameters(), lr=config["learning_rate"])
 
-    # TODO where to get epochs
-    lr_lambda = lambda epoch: (total_epochs - epoch) / total_epochs
+    lr_lambda = lambda epoch: (config["epochs"] - epoch) / config["epochs"]
     lr_scheduler = LambdaLR(optimizer=optimizer, lr_lambda=lr_lambda, verbose=True)
-
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # TODO implement trainer
-    trainer = Trainer()
+    trainer = Trainer(
+        model=model,
+        epochs=config["epochs"],
+        train_dataloader=train_dataloader,
+        val_dataloader=val_dataloader,
+        criterion=criterion,
+        optimizer=optimizer,
+        lr_scheduler=lr_scheduler,
+        device=device,
+        model_dir=config["model_dir"],
+    )
 
     trainer.train()
 
     trainer.save_model()
     trainer.save_loss()
 
-    # TODO implement
-    save_vocab(vocab, path)
-    save_config(config, path)
+    config_path = os.path.join(config["model_dir"], "config.yaml")
+    with open(config_path, "w") as stream:
+        yaml.dump(config, stream)
+
+    vocab_path = os.path.join(config["model_dir"], "vocab.pt")
+    torch.save(vocab, vocab_path)
 
     # TODO implement analogy task
 
 
 if __name__ == "__main__":
-    # TODO adapt config
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, required=True)
     args = parser.parse_args()

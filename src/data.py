@@ -3,6 +3,7 @@ from torchtext.vocab import build_vocab_from_iterator
 from torchtext.datasets import WikiText2, WikiText103
 from torchtext.data.utils import get_tokenizer
 
+import torch
 from torch.utils.data import DataLoader
 
 from functools import partial
