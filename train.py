@@ -68,8 +68,7 @@ def train(config):
 
     vecs = model.linear.weight.cpu().detach().numpy()
     evaluate(vocab, vecs, ['king', 'father', 'school', 'news'])
-    analogy("king", "man", "woman", vecs, vocab)
-    print()
+    print(analogy("king", "man", "woman", vecs, vocab))
 
 
 if __name__ == "__main__":
