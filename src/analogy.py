@@ -1,6 +1,17 @@
 from scipy.spatial import distance
 import numpy as np
 
+def analogy(w1, w2, w3, vecs, vocab):
+    u = vecs[vocab[w1]] - vecs[vocab[w2]] + vecs[vocab[w3]]
+    sim = []
+    for v in vecs:
+        sim.append(distance.cosine(u, v))
+    sim = np.array(sim)
+    ind = np.argpartition(sim, 3)[:3 + 1]
+    ind = ind[np.argsort(sim[ind])][1:]
+    analogy = [(i, vocab.lookup_token(i), sim[i]) for i in ind]
+    return analogy
+
 def get_distance_matrix(wordvecs, metric):
     dist_matrix = distance.squareform(distance.pdist(wordvecs, metric))
     return dist_matrix

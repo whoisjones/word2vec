@@ -8,7 +8,7 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 
 from src.data import get_dataloader
-from src.analogy import evaluate
+from src.analogy import evaluate, analogy
 from src.model import SkipGramModel
 from src.trainer import Trainer
 
@@ -68,6 +68,8 @@ def train(config):
 
     vecs = model.linear.weight.cpu().detach().numpy()
     evaluate(vocab, vecs, ['king', 'father', 'school', 'news'])
+    analogy("king", "man", "woman", vecs, vocab)
+    print()
 
 
 if __name__ == "__main__":
